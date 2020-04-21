@@ -7,7 +7,7 @@ Situations in which this app is useful:
   - tableau server requires two factor authentication
   - or you want to use service account for publishing extracts to tableau server
   
-The app uses <b>Tableau Prep cli</b> ``https://help.tableau.com/current/prep/en-us/prep_run_commandline.htm`` and <b>Tableau Server Python Client</b> ``https://tableau.github.io/server-client-python/docs/`` under the hood.
+The app uses ``<a href="https://help.tableau.com/current/prep/en-us/prep_run_commandline.htm">Tableau Prep cli</a></b> and <b>Tableau Server Python Client</b> ``https://tableau.github.io/server-client-python/docs/`` under the hood.
 
 # set up:
 1) create python virtual environment and install requirements
