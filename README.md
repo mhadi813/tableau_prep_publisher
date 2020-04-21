@@ -7,14 +7,14 @@ Situations in which this app is useful:
   - tableau server requires two factor authentication
   - or you want to use service account for publishing extracts to tableau server
   
-The app uses ``<a href="https://help.tableau.com/current/prep/en-us/prep_run_commandline.htm">Tableau Prep cli</a></b> and <b>Tableau Server Python Client</b> ``https://tableau.github.io/server-client-python/docs/`` under the hood.
+The app uses <b>Tableau Prep cli</b> ``https://help.tableau.com/current/prep/en-us/prep_run_commandline.htm``  and <b>Tableau Server Python Client</b> ``https://tableau.github.io/server-client-python/docs/`` under the hood.
 
 # set up:
 1) create python virtual environment and install requirements
-   ``conda update -n base -c defaults conda``/n
-   ``conda create --name pytab
-   ``conda activate pytab
-   ``conda install pip
+   ``conda update -n base -c defaults conda``
+   ``conda create --name pytab``
+   ``conda activate pytab``
+   ``conda install pip``
    ``pip install -r requirements.txt``
 
 2) modify the flow to <b>output extract file on local machine</b>. If the flow requires credentials for both input and out connections, keep them as is.
@@ -23,9 +23,9 @@ The app uses ``<a href="https://help.tableau.com/current/prep/en-us/prep_run_com
 
     ``example batch file for Windows server``, publishes to default project in Overwirte mode
   
-    `` call activate pytab
-    python tableau_prep_publisher.py -t "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\my_test.tfl" -c "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\credentials.json"
-    call conda deactivate ``
+    ``call activate pytab
+    ``python tableau_prep_publisher.py -t "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\my_test.tfl" -c "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\credentials.json"``
+    ``call conda deactivate ``
 
 4) schedule batch job or shell script
 
