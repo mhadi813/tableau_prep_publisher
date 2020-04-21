@@ -11,8 +11,21 @@ The app uses <b>Tableau Prep cli</b> ``https://help.tableau.com/current/prep/en-
 
 # set up:
 1) create python virtual environment and install requirements
-2) modify flow to output extract file on local machine
-3) create batch or shell script to execute tableau_prep_publisher.py in the virtual environment
+      conda update -n base -c defaults conda
+      conda create --name pytab
+      conda activate pytab
+      conda install pip
+      pip install -r requirements.txt
+
+2) modify the flow to <b>output extract file on local machine</b>. If the flow requires credentials for both input and out connections, keep them as is.
+
+3) create batch or shell script to execute tableau_prep_publisher.py in the python virtual environment
+
+ -- batch file for Windows server, publishes to default project in Overwirte mode
+    call activate pytab
+    python tableau_prep_publisher.py -t "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\my_test.tfl" -c "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\credentials.json"
+    call conda deactivate
+
 4) schedule batch job or shell script
 
 # command line arguments:
