@@ -21,7 +21,8 @@ The app uses <b>Tableau Prep cli</b> ``https://help.tableau.com/current/prep/en-
 
 3) create batch or shell script to execute tableau_prep_publisher.py in the python virtual environment
 
- -- batch file for Windows server, publishes to default project in Overwirte mode
+    ``example batch file for Windows server``, publishes to default project in Overwirte mode
+  
     `` call activate pytab
     python tableau_prep_publisher.py -t "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\my_test.tfl" -c "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\credentials.json"
     call conda deactivate ``
