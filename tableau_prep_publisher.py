@@ -9,8 +9,8 @@ import re
 import logging
 
 parser = argparse.ArgumentParser(
-    description='The app executes tableau prep flow to refresh hyper file locally and/or publish extract file to tableau server\
-        The app uses Tableau prep cli ``https://help.tableau.com/current/prep/en-us/prep_run_commandline.htm`` and \
+    description='The app executes Tableau Prep flow to refresh hyper file locally and/or publishes extract file to Tableau server.\
+        The app uses Tableau Prep cli ``https://help.tableau.com/current/prep/en-us/prep_run_commandline.htm`` and \
         Tableau Server Python Client ``https://tableau.github.io/server-client-python/docs/``', usage='python %(prog)s [-h] [-v --version] [-t --flow_path] [-c --credentails] [-e --hyper] [-m --mode] [-p --project] [-n --not_embed] [-l --logging]',)
 parser.add_argument('-v', '--version',
                     type=str,
@@ -76,9 +76,8 @@ else:
     embed = True
 project = args.project
 
-# args_dict = argparse.Namespace()
 
-logger = logging.getLogger()
+logger = logging.getLogger(name='publisher')
 if log_level == 'DEBUG':
     logging.basicConfig(level=logging.DEBUG)
     logging.debug('Log level set to DEBUG')
@@ -139,6 +138,12 @@ def main():
     else:
         sys.exit(
             'credentials.json filepath was not provided for publishing extract to server')
+    # clean up
+    if input_cred:
+        os.remove(input_cred)
+
+    if output_cred:
+        os.remove(output_cred)
 
 
 def create_script(flow_path, credential_path=None, prep_builder_version='2020.1'):
@@ -319,7 +324,7 @@ def publish_hyper(hyper_file, credential_path, flow_path=None, **kwargs):
             hyper_filepath = os.path.join(project_dir, name)
 
         assert os.path.isfile(hyper_filepath) == True
-        logging.info(
+        logging.debug(
             f'publishing extract file ``{hyper_filepath}`` to ``{project}`` project')
         name = name.split('.')[0]  # remove file extension
 
@@ -335,27 +340,28 @@ def publish_hyper(hyper_file, credential_path, flow_path=None, **kwargs):
                 datasource_id = [
                     datasource.id for datasource in all_datasources if datasource.name == name][0]
                 data_source_item = server.datasources.get_by_id(datasource_id)
-                logging.info(f"appending {hyper_filepath} to {name}")
+                logging.debug(f"appending {hyper_filepath} to {name}")
             else:
                 data_source_item = TSC.DatasourceItem(
                     project_id=project_id, name=name)
-                logging.info(
+                logging.debug(
                     f"publishing {hyper_filepath} as {name} in {mode} mode")
 
         else:
             mode = 'Overwrite'
             data_source_item = TSC.DatasourceItem(
                 project_id=project_id, name=name)
-            logging.info(f"publishing {name} in {mode} mode")
 
-            if 'embed' in kwargs.keys():
-                embedded_credential = TSC.ConnectionCredentials(
-                    username, password, embed=embed, oauth=False)
-                server.datasources.publish(
-                    data_source_item, hyper_filepath, mode, connection_credentials=embedded_credential)
-            else:
-                server.datasources.publish(
-                    data_source_item, hyper_filepath, mode)
+        logging.info(
+            f"publishing {hyper_filepath} as ``{name}`` in {mode} mode to ``{server_address}`` in ``{project}`` project")
+        if 'embed' in kwargs.keys():
+            embedded_credential = TSC.ConnectionCredentials(
+                username, password, embed=embed, oauth=False)
+            server.datasources.publish(
+                data_source_item, hyper_filepath, mode, connection_credentials=embedded_credential)
+        else:
+            server.datasources.publish(
+                data_source_item, hyper_filepath, mode)
     logging.info(f'{hyper_filepath} was successfully published!')
 
 
