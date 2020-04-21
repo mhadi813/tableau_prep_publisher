@@ -11,11 +11,11 @@ The app uses <b>Tableau Prep cli</b> ``https://help.tableau.com/current/prep/en-
 
 # set up:
 1) create python virtual environment and install requirements
-      conda update -n base -c defaults conda
-      conda create --name pytab
-      conda activate pytab
-      conda install pip
-      pip install -r requirements.txt
+     -- conda update -n base -c defaults conda
+     -- conda create --name pytab
+     --  conda activate pytab
+     -- conda install pip
+     -- pip install -r requirements.txt
 
 2) modify the flow to <b>output extract file on local machine</b>. If the flow requires credentials for both input and out connections, keep them as is.
 
