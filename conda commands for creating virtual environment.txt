@@ -1,0 +1,5 @@
+conda update -n base -c defaults conda
+conda create --name pytab
+conda activate pytab
+conda install pip
+pip install -r requirements.txt
