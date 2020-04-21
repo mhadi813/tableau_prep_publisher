@@ -11,7 +11,7 @@ The app uses <b>Tableau Prep cli</b> ``https://help.tableau.com/current/prep/en-
 
 # set up:
 1) create python virtual environment and install requirements
-   ``conda update -n base -c defaults conda
+   ``conda update -n base -c defaults conda``\n
    ``conda create --name pytab
    ``conda activate pytab
    ``conda install pip
