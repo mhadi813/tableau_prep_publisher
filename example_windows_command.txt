@@ -1,0 +1,11 @@
+# publish output extract of ``my_test_flow.tfl`` to a target project ``DataSources`` on Tableau server
+python tableau_prep_publisher.py -t "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\my_test_flow.tfl" -c "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\credentials.json" -p DataSources
+
+# Append only extract to ``master_date.hyper`` on server without running flow a flow
+python tableau_prep_publisher.py -e "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\master_date.hyper" -c "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\credentials.json" -p DataSources -m Append
+
+
+# batch file for Windows server, publishes to default project in Overwirte mode
+call activate pytab
+python tableau_prep_publisher.py -t "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\my_test.tfl" -c "C:\Users\super_user\Desktop\tableau_prep_publisher\my_data_sources\credentials.json"
+call conda deactivate

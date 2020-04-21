@@ -1,0 +1,8 @@
+# publish output of ``test_tableau_prep.tfl`` to ``DataSource`` project on Tableau server
+python tableau_prep_publisher.py -t "/Users/super_user/Documents/tableau_publisher/my_data_sources/test_tableau_prep.tfl" -c "/Users/super_user/Documents/tableau_publisher/my_data_sources/tableau_server_service_account.json" -p DataSources
+
+# Append output of ``test_tableau_prep.tfl`` from ``another_folder`` to ``master_data.hyper`` in ``DataSource`` project on Tableau server
+python tableau_prep_publisher.py -t "/Users/super_user/Documents/tableau_publisher/my_data_sources/test_tableau_prep.tfl" -e '/Users/super_user/Documents/another_folder/master_data.hyper' -c "/Users/super_user/Documents/tableau_publisher/my_data_sources/tableau_server_service_account.json" -p DataSources -m Append
+
+# publish ``test_tableau_prep.hyper`` without running a flow
+python tableau_prep_publisher.py -e '/Users/super_user/Documents/tableau_publisher/my_data_sources/test_tableau_prep.hyper' -c "/Users/super_user/Documents/tableau_publisher/my_data_sources/tableau_server_service_account.json"
