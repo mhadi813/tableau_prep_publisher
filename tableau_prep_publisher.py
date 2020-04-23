@@ -84,7 +84,7 @@ if log_level == 'DEBUG':
 elif log_level == 'WARNING':
     logging.basicConfig(level=logging.WARNING)
 elif log_level == 'ERROR':
-    logging.info(f'log level set to {logger.level}')
+    logging.basicConfig(level=logging.ERROR)
 elif log_level == 'CRITICAL':
     logging.basicConfig(level=logging.CRITICAL)
 else:
