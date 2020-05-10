@@ -99,6 +99,9 @@ def main():
         if os.path.isfile(flow_path):
             shell_command = create_script(flow_path)
             logging.debug(f"command for tableau prep cli: {shell_command}")
+        else:
+            shell_command = None
+            logging.warning(f"{flow_path} is not a valid file path, skipping flow executing.")
     elif hyper_path:
         if os.path.isfile(hyper_path):
             if not os.path.isfile(cred_path):
@@ -265,10 +268,11 @@ def publish_hyper(hyper_file, credential_path, flow_path=None, **kwargs):
         credential_path {str} -- credential.json file per tableau prep cli specification, must contain `outputConnections` credentails for Tableau server
 
     Keyword Arguments:
-        flow_path {str} -- [description] (default: {None})
-        project {str} -- tableau prep folder/project (Defaults: {Defaults})
-        mode {str} -- CreateNew|Overwrite|Append (Defaults: Overwrite)
+        project {str} -- tableau server folder/project where to publish (Defaults: {Defaults})
+        mode {str} -- publish mode CreateNew|Overwrite|Append (Defaults: Overwrite)
         embed {bool} -- if True, embeds credentails in data source (Defaults: True)
+        flow_path {str} -- flow file path for infering extract.hyper path and name (default: {None})
+        name {str} -- name of extract file on server to be replaced or appended to
     """
     with open(credential_path, 'r') as file:
         credentials = json.load(file).get('outputConnections')[0]
@@ -285,14 +289,18 @@ def publish_hyper(hyper_file, credential_path, flow_path=None, **kwargs):
     logging.debug(f'supplied keyword args: {kwargs}')
     with server.auth.sign_in(tableau_auth):
         assert server.is_signed_in() == True
-        if 'project' not in kwargs.keys():
-            all_project_items, pagination_item = server.projects.get()
-            project_id = [
-                project.id for project in all_project_items if project.name == 'Default'][0]
+        if 'project' in kwargs.keys():
+            project = kwargs.get('project')
         else:
-            all_project_items, pagination_item = server.projects.get()
+            project = 'Default'
+
+        all_project_items, pagination_item = server.projects.get()
+        try:
             project_id = [
-                project.id for project in all_project_items if project.name == kwargs.get('project')][0]
+                item.id for item in all_project_items if item.name == project][0]
+        except:
+            project_id = [
+                item.id for item in all_project_items if item.name == 'Default'][0]
 
         logging.debug(f"project_id for {project} is : {project_id}")
 
@@ -319,7 +327,7 @@ def publish_hyper(hyper_file, credential_path, flow_path=None, **kwargs):
         elif os.path.isfile(hyper_file) == True:
             hyper_filepath = hyper_file
             name = os.path.basename(hyper_file)
-        else:  # only filename is pass which is in project folder
+        else:  # when only filename is passed which is in project folder
             name = hyper_file
             hyper_filepath = os.path.join(project_dir, name)
 
@@ -352,7 +360,7 @@ def publish_hyper(hyper_file, credential_path, flow_path=None, **kwargs):
             data_source_item = TSC.DatasourceItem(
                 project_id=project_id, name=name)
 
-        logging.info(
+        logging.debug(
             f"publishing {hyper_filepath} as ``{name}`` in {mode} mode to ``{server_address}`` in ``{project}`` project")
         if 'embed' in kwargs.keys():
             embedded_credential = TSC.ConnectionCredentials(
@@ -362,7 +370,7 @@ def publish_hyper(hyper_file, credential_path, flow_path=None, **kwargs):
         else:
             server.datasources.publish(
                 data_source_item, hyper_filepath, mode)
-    logging.info(f'{hyper_filepath} was successfully published!')
+    logging.info(f'{hyper_filepath} was successfully published in {mode} mode to {project} project!'))
 
 
 if __name__ == '__main__':
